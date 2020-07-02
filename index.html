@@ -20,8 +20,8 @@
     .wrapper .title {
       background-color: #fff;
       text-align: center;
-      height: 30px;
-      line-height: 30px;
+      height: 40px;
+      line-height: 40px;
       font-size: 15px;
       margin-bottom: 10px;
     }
@@ -105,68 +105,134 @@
       padding-bottom: 18px;
     }
 
+    .wrapper .err {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh
+    }
+
   </style>
 </head>
 <body>
 <div class="wrapper">
-  <div class="title">
-    检验报告单
+  <div class="main">
+    <div class="title">
+      检验报告单
+    </div>
+    <div class="person">
+      <div class="info">
+        <div class="item">姓名：---</div>
+        <div class="item">性别：男</div>
+        <div class="item">年龄：---</div>
+        <div class="item">病历号：001889946800</div>
+        <div class="item">样本编号：c1l40</div>
+        <div class="item">采样时间：---</div>
+        <div class="item">病床号：</div>
+        <div class="item">科别：</div>
+        <div class="item">标本类型：咽拭子</div>
+        <div class="item">送检医师：</div>
+        <div class="item">临床诊断：新冠筛查</div>
+      </div>
+      <div class="remark">
+        备注：
+      </div>
+    </div>
+    <div class="result">
+      <div class="head">
+        <div class="th-1">中文名称</div>
+        <div class="th-2">结果</div>
+        <div class="th-3">参考值</div>
+      </div>
+      <div class="content">
+        <div class="td-1">新型冠状病毒核酸检测</div>
+        <div class="td-2">阴性</div>
+        <div class="td-3">阴性(-)</div>
+      </div>
+    </div>
+    <div class="signature">
+      <p>签收日期：---</p>
+      <p>签收时间：11:29:00</p>
+      <p>报告日期：---</p>
+      <p>报告时间：15:58:52</p>
+      <p>检测岗位：分子生物学</p>
+      <p>检验者：乔艳</p>
+      <p>审核者：司文喆</p>
+    </div>
   </div>
-  <div class="person">
-    <div class="info">
-      <div class="item">姓名：---</div>
-      <div class="item">性别：男</div>
-      <div class="item">年龄：---</div>
-      <div class="item">病历号：001889946800</div>
-      <div class="item">样本编号：c1l40</div>
-      <div class="item">采样时间：---</div>
-      <div class="item">病床号：</div>
-      <div class="item">科别：</div>
-      <div class="item">标本类型：咽拭子</div>
-      <div class="item">送检医师：</div>
-      <div class="item">临床诊断：新冠筛查</div>
-    </div>
-    <div class="remark">
-      备注：
-    </div>
-  </div>
-  <div class="result">
-    <div class="head">
-      <div class="th-1">中文名称</div>
-      <div class="th-2">结果</div>
-      <div class="th-3">参考值</div>
-    </div>
-    <div class="content">
-      <div class="td-1">新型冠状病毒核酸检测</div>
-      <div class="td-2">阴性</div>
-      <div class="td-3">阴性(-)</div>
-    </div>
-  </div>
-  <div class="signature">
-    <p>签收日期：---</p>
-    <p>签收时间：11:29:00</p>
-    <p>报告日期：---</p>
-    <p>报告时间：15:58:52</p>
-    <p>检测岗位：分子生物学</p>
-    <p>检验者：乔艳</p>
-    <p>审核者：司文喆</p>
+  <div class="err">
+    <p>暂无数据</p>
   </div>
 </div>
 </body>
 <script>
+var info = {
+  loushuai: {
+    num: '001889946800',
+    sample: 'c1l40',
+    time1: '11:29:00',
+    time2: '15:58:52',
+    verifier: '乔艳',
+    verifier1: '司文喆'
+  },
+  louliancai: {
+    num: '001889946789',
+    sample: 'c1l23',
+    time1: '11:15:00',
+    time2: '15:23:17',
+    verifier: '李丽芳',
+    verifier1: '张径'
+  }
+}
+
 function getName () {
   var person = prompt('请输入你的名字') || '张三'
   $('.wrapper .person .info .item').eq(0).html('姓名：' + person)
+  return person
 }
 
-function getAge () {
-  var age = prompt('请输入你的年龄') || '18'
-  $('.wrapper .person .info .item').eq(2).html('年龄：' + age)
+function showErr () {
+  $('.err').fadeIn()
+  $('.main').fadeOut()
 }
 
-function getGender () {
-  var gender = prompt('请输入你的性别', '男') || '男'
-  $('.wrapper .person .info .item').eq(1).html('性别：' + gender)
+function getID () {
+  var id = prompt('请输入身份证号')
+  if (!id || id.length !== 18) {
+    throw 'fault'
+  } else {
+    $('.main').fadeIn()
+    $('.err').fadeOut()
+    $('.wrapper .person .info .item').eq(2).html('年龄：' + GetAge(id))
+  }
+}
+
+function GetAge (identityCard) {
+  var len = (identityCard + '').length
+  var strBirthday = ''
+  if (len == 18)//处理18位的身份证号码从号码中得到生日和性别代码
+  {
+    strBirthday = identityCard.substr(6, 4) + '/' + identityCard.substr(10, 2) + '/' + identityCard.substr(12, 2)
+  }
+  if (len == 15) {
+    var birthdayValue = ''
+    birthdayValue = identityCard.charAt(6) + identityCard.charAt(7)
+    if (parseInt(birthdayValue) < 10) {
+      strBirthday = '20' + identityCard.substr(6, 2) + '/' + identityCard.substr(8, 2) + '/' + identityCard.substr(10, 2)
+    } else {
+      strBirthday = '19' + identityCard.substr(6, 2) + '/' + identityCard.substr(8, 2) + '/' + identityCard.substr(10, 2)
+    }
+
+  }
+  //时间字符串里，必须是“/”
+  var birthDate = new Date(strBirthday)
+  var nowDateTime = new Date()
+  var age = nowDateTime.getFullYear() - birthDate.getFullYear()
+  //再考虑月、天的因素;.getMonth()获取的是从0开始的，这里进行比较，不需要加1
+  if (nowDateTime.getMonth() < birthDate.getMonth() || (nowDateTime.getMonth() == birthDate.getMonth() && nowDateTime.getDate() < birthDate.getDate())) {
+    age--
+  }
+  return age
 }
 
 function getDate () {
@@ -176,18 +242,39 @@ function getDate () {
   $('.wrapper .signature p').eq(2).html('报告日期：' + date)
 }
 
-function makeNum () {
-  var random = parseInt(Math.random() * 100) + ''
-  $('.wrapper .person .info .item').eq(3).html('病历号：0018899468' + random)
+function makeInfo (name) {
+  var config
+  if (name === '娄帅') {
+    config = info['loushuai']
+  } else if (name === '娄连财') {
+    config = info['louliancai']
+  } else {
+    throw 'fault'
+  }
+  $('.wrapper .person .info .item').eq(3).html('病历号：' + config.num)
+  $('.wrapper .person .info .item').eq(4).html('样本编号：' + config.sample)
+  $('.wrapper .person .info .item').eq(4).html('样本编号：' + config.sample)
+  $('.wrapper .signature p').eq(1).html('签收时间：' + config.time1)
+  $('.wrapper .signature p').eq(3).html('报告时间：' + config.time2)
+  $('.wrapper .signature p').eq(5).html('检验者：' + config.verifier)
+  $('.wrapper .signature p').eq(6).html('检验者：' + config.verifier1)
+
 }
 
 $(function () {
-  getName()
-  getAge()
-  getGender()
-  // makeNum()
-  getDate()
-  $('.wrapper').show()
+  try {
+    var name = getName()
+    getID()
+    getDate()
+    makeInfo(name)
+    $('.wrapper').show()
+  } catch (e) {
+    $('.err').fadeIn(0)
+    $('.main').fadeOut(0)
+    setTimeout(() => {
+      $('.wrapper').show()
+    })
+  }
 })
 </script>
 </html>
