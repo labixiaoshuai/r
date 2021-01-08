@@ -236,7 +236,7 @@ function GetAge (identityCard) {
 }
 
 function getDate () {
-  var date = dayjs().subtract(3, 'day').format('YYYY-MM-DD')
+  var date = dayjs().subtract(2, 'day').format('YYYY-MM-DD')
   $('.wrapper .person .info .item').eq(5).html('采样时间：' + date)
   $('.wrapper .signature p').eq(0).html('签收日期：' + date)
   $('.wrapper .signature p').eq(2).html('报告日期：' + date)
